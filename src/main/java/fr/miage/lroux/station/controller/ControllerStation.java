@@ -23,7 +23,7 @@ public class ControllerStation {
         return serviceStation.getStationById(id);
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteStation(@PathVariable Long id) throws Exception {
         serviceStation.deleteStation(id);
     }
