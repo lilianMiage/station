@@ -9,7 +9,7 @@ services:
       MYSQL_PASSWORD: mysecret
       MYSQL_ROOT_PASSWORD: rootpassword
     ports:
-      - "3308:3306"
+      - "3310:3306"
     networks:
       - mynetwork
     volumes:
