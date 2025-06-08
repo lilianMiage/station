@@ -13,7 +13,7 @@ public class ControllerStation {
     @Autowired
     private ServiceStation serviceStation;
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public Station createStation(@RequestBody Station station) throws Exception {
         return serviceStation.createStation(station);
     }
@@ -23,7 +23,7 @@ public class ControllerStation {
         return serviceStation.getStationById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteStation(@PathVariable Long id) throws Exception {
         serviceStation.deleteStation(id);
     }

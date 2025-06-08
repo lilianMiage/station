@@ -64,7 +64,7 @@ public class ControllerStationTests {
 
     @Test
     public void deleteStationByid() throws Exception {
-        mvc.perform(delete("/api/station/delete/1"))
+        mvc.perform(delete("/api/station/1"))
                 .andExpect(status().isOk());
     }
 

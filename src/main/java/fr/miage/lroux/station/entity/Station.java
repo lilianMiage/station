@@ -13,19 +13,14 @@ public class Station {
     @GeneratedValue
     private long stationId;
 
-
     private String position;
-
 
     private int nbPlaces;
 
 
     private int nbPlacesTaken;
 
-
     private int nbPlacesFree;
-
-    //private ArrayList<Voiture> listVoiture
 
     public Station() {}
 
