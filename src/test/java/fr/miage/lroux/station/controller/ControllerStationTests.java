@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,7 +35,7 @@ public class ControllerStationTests {
 
     @BeforeEach
     public void setUp(){
-        station = new Station("51,46", 80, 42,38);
+        station = new Station(List.of(50.68, 5.55), 80, 40, 40);
         station = repoStation.save(station);
     }
 
@@ -41,7 +43,7 @@ public class ControllerStationTests {
     public void getStationByid() throws Exception {
         mvc.perform(get("/api/station/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.position", is(station.getPosition())))
+                .andExpect(jsonPath("$.localisation", is(station.getLocalisation())))
                 .andExpect(jsonPath("$.nbPlaces", is(station.getNbPlaces())))
                 .andExpect(jsonPath("$.nbPlacesTaken", is(station.getNbPlacesTaken())))
                 .andExpect(jsonPath("$.nbPlacesFree", is(station.getNbPlacesFree())));
@@ -49,14 +51,14 @@ public class ControllerStationTests {
 
     @Test
     public void createStation() throws Exception{
-        Station stationObject = new Station("50,68", 80, 40,40);
+        Station stationObject = new Station(List.of(50.68, 5.55), 80, 40,40);
         ObjectMapper om = new ObjectMapper();
         String stationJson = om.writeValueAsString(stationObject);
         mvc.perform(post("/api/station/create")
                         .contentType("application/json")
                         .content(stationJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.position", is(stationObject.getPosition())))
+                .andExpect(jsonPath("$.localisation", is(stationObject.getLocalisation())))
                 .andExpect(jsonPath("$.nbPlaces", is(stationObject.getNbPlaces())))
                 .andExpect(jsonPath("$.nbPlacesTaken", is(stationObject.getNbPlacesTaken())))
                 .andExpect(jsonPath("$.nbPlacesFree", is(stationObject.getNbPlacesFree())));
@@ -64,8 +66,30 @@ public class ControllerStationTests {
 
     @Test
     public void deleteStationByid() throws Exception {
-        mvc.perform(delete("/api/station/delete/1"))
+        mvc.perform(delete("/api/station/1"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateStationWhenAddingCar_ShouldDecreaseFreePlacesAndIncreaseTaken() throws Exception {
+        int placesFreeBefore = station.getNbPlacesFree();
+        int placesTakenBefore = station.getNbPlacesTaken();
+
+        mvc.perform(put("/api/station/add/" + station.getStationId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nbPlacesFree").value(placesFreeBefore - 1))
+                .andExpect(jsonPath("$.nbPlacesTaken").value(placesTakenBefore + 1));
+    }
+
+    @Test
+    public void updateStationWhenRetrievingCar_ShouldIncreaseFreePlacesAndDecreaseTaken() throws Exception {
+        int placesFreeBefore = station.getNbPlacesFree();
+        int placesTakenBefore = station.getNbPlacesTaken();
+
+        mvc.perform(put("/api/station/retrieve/" + station.getStationId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nbPlacesFree").value(placesFreeBefore + 1))
+                .andExpect(jsonPath("$.nbPlacesTaken").value(placesTakenBefore - 1));
     }
 
 }

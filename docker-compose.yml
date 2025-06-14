@@ -9,7 +9,7 @@ services:
       MYSQL_PASSWORD: mysecret
       MYSQL_ROOT_PASSWORD: rootpassword
     ports:
-      - "3310:3306"
+      - "3307:3306"
     networks:
       - mynetwork
     volumes:
@@ -35,7 +35,7 @@ services:
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
       SPRING_JPA_HIBERNATE_DDL_AUTO: none
     ports:
-      - "8087:8080"
+      - "8087:8087"
     networks:
       - mynetwork
 
