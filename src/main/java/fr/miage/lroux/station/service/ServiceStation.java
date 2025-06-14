@@ -46,7 +46,7 @@ public class ServiceStation {
     public Station getStationById(Long stationId) throws Exception {
         Optional<Station> stationOptional = repoStation.findById(stationId);
         if (stationOptional.isEmpty()) {
-            throw new Exception("A station with this ID " + stationId + " already exists");
+            throw new Exception("A station with this ID " + stationId + " doesn't exists");
         }
         return stationOptional.get();
     }
