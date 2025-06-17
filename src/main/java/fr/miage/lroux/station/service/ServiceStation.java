@@ -33,6 +33,9 @@ public class ServiceStation {
         if (stationOptional.isPresent()) {
             throw new Exception("A station with this ID " + station.getStationId() + " already exists");
         }
+        if (station.getNbPlacesFree() != station.getNbPlaces() - station.getNbPlacesTaken()) {
+            throw new Exception("The number of free places does not match the total places minus taken places");
+        }
         repoStation.save(station);
         return station;
     }
